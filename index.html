@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width",
+    initial-scale=1.0">
+    <link rel="stylesheet" href="css.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <title>My Resteraunt App</title>
+  
+  <div class="jumbotron-fluid">
+    <div class="container-fluid">
+      <h1 class="jumboText">Hello,</h1>
+      <h4 class="jumboText">View resteraunts, check out reviews and add resteraunts you have found!</h4>
+    </div>
+  </div>
+    
+  </head>
+  
+
+  <body>  
+ 
+ <div id="searchBoxLabel"><p style="color:white;">Search resteraunts in another area:</p></div>
+<input type="text" id="mapSearch" size="50" placeholder="Search...">
+<div class="box"> 		
+  	
+    <div id="map"></div>
+    
+    <div id="filters">
+    <h3 class="text-center">Resteraunts in your Area</h3>      
+      <div class="text-center">  
+        <h4 class="text-center">Show resteraunt's</h4>
+        <p style="display: inline-block;">Between</p>
+        <select id="starsFilter1" onchange="getFilter();">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <p style="display: inline-block;">stars and</p>
+        <select id="starsFilter2" onchange="getFilter();">
+          <option value="5">5</option>
+          <option value="4">4</option>
+          <option value="3">3</option>
+          <option value="2">2</option>
+          <option value="1">1</option>
+          <option value="0">0</option>
+        </select>
+        <p style="display: inline-block;">stars</p>
+      </div>
+    </div>
+    
+
+
+    <div id="sideBar">
+    </div>
+
+</div>
+
+<!--Add Resteraunt Modal section-->
+<div class = "modalAdd">
+  <div id = "modalContentAdd" class="form-group">
+     <div id="modalAddHeader">
+      <h1 style="color:white;">Add Resteraunt Details..</h1>
+    </div>
+    <label for="restName">What is the Resteraunt Name:</label>
+    <input type="text" class="form-control" id = "Uname"/>
+    <label for="restAddress">What is the Resteraunt Address:</label>
+    <input type="text" class="form-control" id = "Uadd"/>    
+    </br>
+    <input type = "button" id="formClose" value="Submit" onclick="(function()
+                                                      {
+                                                        $('.modalAdd').css('display','none');
+                                                        return false;
+                                                      })();return false;"/>
+    <input type="button" id="cancelForm" value="Cancel" onclick="closeForm()">
+
+  </div>
+</div>	
+<!--Add Resteraunt Modal section-->
+
+<!--Add Review Modal section-->
+<div class = "modalReview">
+  <div id = "modalContentReview" class="form-group">
+    <div id="modalReviewHeader">
+      <h1 style="color:white;">Leave Your Review..</h1>
+    </div>
+    <label for="restStars">What is your star rating:</label>
+    <select class="form-control" id = "Ustars">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+    <label for="restRev">What is your review:</label>
+    <textarea class="form-control" id = "Urev" rows="3"></textarea>
+    </br>
+    <input type = "button" id="formClose" value="Submit" onclick="(function()
+                                                      {
+                                                        $('.modalReview').css('display','none');
+                                                   
+
+                                                        return false;
+                                                      })();return false;"/>
+
+    <input type="button" id="cancelForm" value="Cancel" onclick="closeForm()">
+    </br>
+    </br>
+    <p style="color:red">Click 'Add review' to leave your review</p>                                                 
+  </div>
+</div>  
+<!--Add Review Modal section-->  	
+
+
+
+
+
+
+
+
+
+  	<script src="js.js"></script>
+  	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAoHv4k8hPjT1cFGfULh72Ngew8MGYSdr0&callback=getLocation&libraries=places" 
+ 	async defer> 	
+  	</script> <!--makes a call to google maps API with my devloper API key and uses the getLocation function as a callback, as well as libraries = places
+                  for retrieval of google places data -->
+
+  	
+  	<script src="resteraunts.js"></script>
+
+ </body>
+
+ <div class="footer">
+ </div>
+
+
+
+
+
+
+</html>
