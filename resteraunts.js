@@ -10,7 +10,7 @@ var resteraunts =
 		"ratings":[
 			{
 				"stars":3,
-            	"review":"Waited too long for the food"
+            	"review":"Waited too long for the food, but was ok when it arrived"
 			},
 			{
 				"stars":4,

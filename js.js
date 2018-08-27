@@ -27,7 +27,7 @@ function displayLocation(position){ //display location function
   initMap(latLng); //calls init map with latLng as argument
   createMarker(latLng); //also calling createMarker function 
   setTimeout(formPlacesData,1200);
-  setTimeout(sideBarPop,1150);
+  setTimeout(sideBarPop,1250);
   setTimeout(mapControl,1150);
   setTimeout(addReview,1150);
 }
@@ -53,7 +53,7 @@ function initMap(latLng){ //function to display the map
 
         var request = { //sets up request to be passed as an argument to the google service.nearbySearch
           location:latLng,
-          radius:12047,
+          radius:14047,
           types: ['resteraunt'] //sets type of 'place' to return
         };
 
@@ -63,20 +63,34 @@ function initMap(latLng){ //function to display the map
         
         var searchBox = new google.maps.places.SearchBox(document.getElementById('mapSearch'));
         
-        google.maps.event.addListener(searchBox,'places_changed',function(){
-          var places = searchBox.getPlaces();
-          var bounds = new google.maps.LatLngBounds();         
-          var i, place;
+        google.maps.event.addListener(searchBox,'places_changed',function(){ //listens for a new area search 
+          
+          
+          for (var i=0; i<markers.length;i++){ //removes current markers from map and emptys array
+            markers[i].setMap(null);
+          }
 
-          for(i=0; place=places[i];i++){          
+          markers.length = 0;
+
+
+          for (var x = 0; i<placesArr.length;x++){ //removes google places markers from map
+            placesArr[x].setMap(null);
+          }
+
+
+          var places = searchBox.getPlaces(); //pulls places from searchbox search
+          var bounds = new google.maps.LatLngBounds(); //sets new bounds                
+          var p, place;
+
+          for(p=0; place=places[p];p++){          
             bounds.extend(place.geometry.location);
             var newLoc = place.geometry.location;                   
           }
-         
+
+
           map.fitBounds(bounds);
           map.setZoom(12);
           newArea(newLoc);
-          setTimeout(formPlacesData,500);
           setTimeout(sideBarPop,600);
 
 
@@ -92,15 +106,13 @@ var request = {
           types: ['resteraunt']
         };
 
+
+
+
 var service = new google.maps.places.PlacesService(map);
         service.nearbySearch(request, callBack);
 
 }
-
-
-
-
-
 
 
 function callBack(results, status){
@@ -118,11 +130,12 @@ function callBack(results, status){
 }
 }
 
-// JUST NEED TO FIND A WAY TO CALL FORMPLACESDATA AGAIN AFTER NEW SEARCH
-// and clear markers upon new area search
+
 
 
 function callBackDetails(place, status){ //forms retrieved data before calling addMarker and populating map with new markers
+
+var placesArr=[];
 
 if (status == google.maps.places.PlacesServiceStatus.OK) {  
     place['rating'] = []; //in order to pass my newly retrieved places into my addMarker function, i had to manipulate the 'review' structure within the pulled places
@@ -134,25 +147,25 @@ if (status == google.maps.places.PlacesServiceStatus.OK) {
     }
 
     placesArr.push(place); //pushes all places to the places Array
+    formPlacesData(placesArr);
   }
-
 
 
 }   
 
 
-function formPlacesData(){ //simple function to loop through places array and call the addMarker function with correct arguments in the correct form
+function formPlacesData(placesArr){ //simple function to loop through places array and call the addMarker function with correct arguments in the correct form
+
 
   for (var x=0; x < placesArr.length; x++){ //loops through the resteraunts in the JSON file
           var resteraunt = placesArr[x];
           var location = new google.maps.LatLng(resteraunt.geometry.location.lat(),resteraunt.geometry.location.lng());
 
           addMarker(map,resteraunt.name,location,resteraunt.formatted_address,resteraunt.rating,resteraunt.avStars,resteraunt.geometry.location.lat(),resteraunt.geometry.location.lng())
-
+          
   }
 }
      
-
 
 function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //function to display the resteraunts
           
@@ -166,12 +179,14 @@ function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //functio
             avStars:avStars,
             lat:lat,
             lng:lng,
+            animation: google.maps.Animation.DROP
             
             
           });
 
           
           markers.push(marker); //pushes to markers array
+
 
           var contentString = name+"<br>"+address //setting up the infoWindow
           var infowindow = new google.maps.InfoWindow({
@@ -187,7 +202,7 @@ function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //functio
 
           });
 
-          
+       
 
     }
 
@@ -200,6 +215,9 @@ function markerReview(thisMarker){ //function to allow reviews on marker click
 
   let targetRest = $(rest).nextAll('button').first();
   $(targetRest).click(); 
+
+  var isolateDiv = $(rest).parent();  //hiding other resteraunts except selected one
+  $(isolateDiv).siblings().hide();
 
 
  
@@ -275,7 +293,7 @@ if ((markers[i].avStars >= filter1) && (markers[i].avStars <= filter2) || (marke
     "<h3 class='infoNames'>Address: </h3>"+markers[i].address+
     "<h3 class ='infoNames'>Average Stars: </h3>"+markers[i].avStars+
                           
-    "<h4 class='reviewLink'>Show Reviews</h4>"+
+    "<h4 class='reviewLink'>Show Reviews"+"("+markers[i].rating.length+")"+"</h4>"+
     "<div class='reviewHolder'>"+"</br>"+reviews.join(' ')+
     "<img src='https://maps.googleapis.com/maps/api/streetview?size=200x200&location="
     +markers[i].lat+","+markers[i].lng+"&key=AIzaSyAoHv4k8hPjT1cFGfULh72Ngew8MGYSdr0'"+
@@ -367,17 +385,26 @@ function writeReview(thisBtn){
 
 function addResteraunt(event){
   
+  
   let newLat = event.latLng.lat();
   let newLng = event.latLng.lng();
+  
+  const Url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+newLat+","+newLng+"+&key=AIzaSyAoHv4k8hPjT1cFGfULh72Ngew8MGYSdr0";
+  //Url for submitting a geocoding API request
+  var newAddress;  
+  $.getJSON(Url, function(result){ //makes a getJSON request to reverse geocode latLng into a formatted address
+    newAddress = result.results[0].formatted_address;
+
   let newName = document.getElementById('Uname').value;
-  let newAddress = document.getElementById('Uadd').value;
   let newReviews = [];
   let newAvStars = 0;
   let location = new google.maps.LatLng(newLat,newLng);
- 
+  
+   
   addMarker(map,newName,location,newAddress,newReviews,newAvStars,newLat,newLng);
-  sideBarPop();
+  sideBarPop(); //adds marker with new data
 
+});
 }
 
 
