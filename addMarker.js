@@ -1,3 +1,6 @@
+var selectedInfoWindow;
+
+
 function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //function to display the resteraunts
           
           var marker = new google.maps.Marker({ //creating a new google maps marker
@@ -27,8 +30,26 @@ function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //functio
           });
 
           google.maps.event.addListener(marker, 'click', function(){
-            infowindow.open(map,marker); //info window with resteraunt name
             markerReview(this);
+
+          });
+
+          google.maps.event.addListener(marker,'mouseover',function(){
+            
+            //checks to see if infowindow is open already, if it is, then close it and open new infowindow
+            if(selectedInfoWindow != null && selectedInfoWindow.getMap() != null){
+              selectedInfoWindow.close();
+            }
+
+            if(selectedInfoWindow == infowindow){
+              selectedInfoWindow = null;
+              return;
+            }
+
+          
+
+          selectedInfoWindow = infowindow;
+          selectedInfoWindow.open(map,marker);
 
           });
 

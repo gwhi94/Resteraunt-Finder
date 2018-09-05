@@ -10,7 +10,7 @@ function initMap(latLng){ //function to display the map
         var options ={
           zoom:12,
           center:latLng, //map centers on user
-          gestureHandling:'greedy'
+          gestureHandling:'greedy' //allows zooming without cntrl key
         };
 
         //creating a new google map
@@ -61,7 +61,7 @@ function initMap(latLng){ //function to display the map
           map.fitBounds(bounds);
           map.setZoom(12);
           newArea(newLoc);
-          setTimeout(sideBarPop,600);
+          setTimeout(sideBarPop,700);
 
 
         });
