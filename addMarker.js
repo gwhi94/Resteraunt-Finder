@@ -24,6 +24,7 @@ function addMarker(map,name,location,address,reviews,avStars,lat,lng,website,pho
 
 
           google.maps.event.addListener(marker, 'click', function(){
+           $('#targetName').html(this.name);
             markerReview(this);
 
           });
