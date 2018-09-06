@@ -5,7 +5,8 @@ function formPlacesData(placesArr){ //simple function to loop through places arr
           var resteraunt = placesArr[x];
           var location = new google.maps.LatLng(resteraunt.geometry.location.lat(),resteraunt.geometry.location.lng());
 
-          addMarker(map,resteraunt.name,location,resteraunt.formatted_address,resteraunt.rating,resteraunt.avStars,resteraunt.geometry.location.lat(),resteraunt.geometry.location.lng())
+          addMarker(map,resteraunt.name,location,resteraunt.formatted_address,resteraunt.rating,resteraunt.avStars,
+          	resteraunt.geometry.location.lat(),resteraunt.geometry.location.lng(),resteraunt.website,resteraunt.formatted_phone_number)
           
   }
 }

@@ -1,7 +1,7 @@
 var selectedInfoWindow;
 
 
-function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //function to display the resteraunts
+function addMarker(map,name,location,address,reviews,avStars,lat,lng,website,phone){ //function to display the resteraunts
           
           var marker = new google.maps.Marker({ //creating a new google maps marker
             position:location,
@@ -10,6 +10,8 @@ function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //functio
             address:address,
             rating:reviews,
             avStars:avStars,
+            website:website,
+            phone:phone,
             lat:lat,
             lng:lng,
             animation: google.maps.Animation.DROP
@@ -21,21 +23,25 @@ function addMarker(map,name,location,address,reviews,avStars,lat,lng){ //functio
           markers.push(marker); //pushes to markers array
 
 
-          var contentString = name+"<br>"+address //setting up the infoWindow
-          var infowindow = new google.maps.InfoWindow({
-            
-          content:contentString
-
-            
-          });
-
           google.maps.event.addListener(marker, 'click', function(){
             markerReview(this);
 
           });
 
           google.maps.event.addListener(marker,'mouseover',function(){
+
+          var starsHolder;
+          starsHolder = this.avStars;
+
+          var websiteTag = "Website"; //forms wesbite link
+          var websiteLink = websiteTag.link(website);
+          var contentString = name+"<br>"+address+"<br>"+websiteLink+"<br>"+phone+"<br>"+"Stars: "+starsHolder //setting up the infoWindow
+          var infowindow = new google.maps.InfoWindow({
             
+          content:contentString
+
+        });
+
             //checks to see if infowindow is open already, if it is, then close it and open new infowindow
             if(selectedInfoWindow != null && selectedInfoWindow.getMap() != null){
               selectedInfoWindow.close();
