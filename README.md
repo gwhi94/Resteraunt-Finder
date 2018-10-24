@@ -8,6 +8,7 @@
  **5** - Show resteraunts on map <br/> 
  **6** - Allow users to leave reviews and add their own resteraunts <br/>
  **7** - Use Google Places API to populate the map with real-world resteraunts, pull data from these resteraunts
+ **8** - Present over video call to simulate real life conditions
  <br/>
  ### Skills Developed
  * External API use
